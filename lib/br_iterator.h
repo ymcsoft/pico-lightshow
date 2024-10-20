@@ -25,11 +25,11 @@ public:
         }
     }
 
-    uint8_t inline begin() const {
+    [[nodiscard]] uint8_t inline begin() const {
         return up? BR_MIN : BR_MAX;
     }
 
-    uint8_t inline end() const {
+    [[nodiscard]] uint8_t inline end() const {
         return up? BR_MAX : BR_MIN;
     }
 

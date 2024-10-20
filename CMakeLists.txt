@@ -6,8 +6,10 @@ project(pico_lightshow C CXX ASM)
 
 pico_sdk_init()
 
-add_executable(pico_lightshow main.cpp LightShow.cpp LightShow.h br_iterator.h)
 add_subdirectory(pico_neopixels)
+include_directories(include)
+set(SOURCES src/main.cpp lib/LightShow.cpp lib/br_iterator.h lib/range.h)
+add_executable(pico_lightshow ${SOURCES})
 
 pico_enable_stdio_usb(pico_lightshow 1)
 pico_enable_stdio_uart(pico_lightshow 0)
