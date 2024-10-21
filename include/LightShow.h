@@ -38,7 +38,7 @@ static uint8_t adjust (uint8_t value);
 class LightShow {
 public:
     LightShow();
-    LightShow(uint16_t numPixels, uint16_t pin);
+    LightShow(uint16_t numPixels, uint16_t pin, uint16_t type=NEO_GBR + NEO_KHZ800);
     virtual ~LightShow();
     void glowing(struct PIXEL_COLOR* pixelColor, uint16_t delay=CYCLEDELAY);
     void colorWipe(struct PIXEL_COLOR *color, uint32_t wait=CYCLEDELAY);

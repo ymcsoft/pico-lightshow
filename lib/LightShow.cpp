@@ -5,10 +5,10 @@
 #include "br_iterator.h"
 #include "range.h"
 
-LightShow::LightShow() : LightShow(NUMPIXELS, PIN) {};
+LightShow::LightShow() : LightShow(NUMPIXELS, PIN, NEO_GBR + NEO_KHZ800) {};
 
-LightShow::LightShow(uint16_t numPixels, uint16_t pin) {
-    this->pixels = new Adafruit_NeoPixel(numPixels, pin, NEO_GRB + NEO_KHZ800);
+LightShow::LightShow(uint16_t numPixels, uint16_t pin, uint16_t type) {
+    this->pixels = new Adafruit_NeoPixel(numPixels, pin, NEO_RGB + NEO_KHZ800);
 }
 
 LightShow::~LightShow() {
