@@ -7,6 +7,9 @@
 #include <cstdio>
 #include "pico/stdio.h"
 #include "pico/time.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#define NEOPIXEL_TASK_PRIORITY				( tskIDLE_PRIORITY + 1UL )
 #include "Adafruit_NeoPixel.hpp"
 // Which pin on the Pico is connected to the NeoPixels?
 #define PIN        0 // On Trinket or Gemma, suggest changing this to 1
@@ -26,7 +29,7 @@ static uint8_t level = 0 ;
 
 struct PIXEL_COLOR {
     uint8_t r, g, b;
-    PIXEL_COLOR(uint8_t r=0, uint8_t g=0, uint8_t b=0) {
+    explicit PIXEL_COLOR(uint8_t r=0, uint8_t g=0, uint8_t b=0) {
         this->r = r;
         this->b = b;
         this->g = g;
@@ -41,7 +44,7 @@ public:
     LightShow(uint16_t numPixels, uint16_t pin, uint16_t type=NEO_GBR + NEO_KHZ800);
     virtual ~LightShow();
     void glowing(struct PIXEL_COLOR* pixelColor, uint16_t delay=CYCLEDELAY);
-    void colorWipe(struct PIXEL_COLOR *color, uint32_t wait=CYCLEDELAY);
+    void sparkle(struct PIXEL_COLOR* pixelColor, uint16_t cycles, uint32_t wait=CYCLEDELAY);
     void colorWipe(struct PIXEL_COLOR* (* colorFunc)(void), uint32_t wait=CYCLEDELAY);
     void theaterChase(struct PIXEL_COLOR* color, uint32_t wait=CYCLEDELAY);
     void rainbow(uint32_t wait=DELAYVAL);

@@ -4,6 +4,7 @@
 #include "LightShow.h"
 #include "br_iterator.h"
 #include "range.h"
+#include <random>
 
 LightShow::LightShow() : LightShow(NUMPIXELS, PIN, NEO_GBR + NEO_KHZ800) {};
 
@@ -48,12 +49,18 @@ void LightShow::setBrightness(uint16_t delay, bool up) {
     printf("Ending LightShow::setBrightness level=%d",level);
 }
 
-void LightShow::colorWipe(struct PIXEL_COLOR *color, uint32_t wait) {
-    for(uint16_t i=0; i<pixels->numPixels(); i++) {
-        pixels->setPixelColor(i, Adafruit_NeoPixel::Color(color->r ,color->g, color->b));
-        pixels->show();
-        sleep_ms(wait);
-    }
+void LightShow::sparkle(struct PIXEL_COLOR* pixelColor, uint16_t cycles, uint32_t wait) {
+    for(int c = 0; c < cycles; c++)
+        for(uint16_t i=0; i<pixels->numPixels(); i++) {
+            uint32_t colour = rand() % 16 ? Adafruit_NeoPixel::Color(0,0,0)
+                    : Adafruit_NeoPixel::Color(pixelColor->r,pixelColor->g,pixelColor->b);
+            pixels->setPixelColor(i, colour);
+            pixels->show();
+            sleep_ms(wait);
+            pixels->clear();
+            pixels->show();
+            sleep_ms(wait);
+        }
 }
 
 void LightShow::colorWipe(struct PIXEL_COLOR* (* colorFunc)(), uint32_t wait) {
