@@ -16,7 +16,7 @@ LightShow::~LightShow() {
     delete this->pixels;//cleanup Adafruit_NeoPixel structure
 }
 
-void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* l, AdjustFunc func) {
+void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* l, ADJUST_FUNC func) {
     pixels->setBrightnessFunctions(func,func,func,func);
     pixels->clear(); // Set all pixel colors to 'off'
     printf("cleared pixels 1, level = %d\n", *l);
@@ -33,7 +33,7 @@ void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* l, Adjus
     *l = 0; //set default brightness level
 }
 
-void LightShow::setBrightness(uint16_t delay, bool up, uint8_t* l, AdjustFunc func) {
+void LightShow::setBrightness(uint16_t delay, bool up, uint8_t* l, ADJUST_FUNC func) {
     br_iterator iter(up);
     printf("Starting LightShow::setBrightness up=%d",up);
     *l = iter.begin();
@@ -63,9 +63,9 @@ void LightShow::sparkle(struct PIXEL_COLOR* pixelColor, uint16_t cycles, uint32_
         }
 }
 
-void LightShow::colorWipe(struct PIXEL_COLOR* (* colorFunc)(), uint32_t wait) {
+void LightShow::colorWipe(struct PIXEL_COLOR* (* COLOR_FUNC)(), uint32_t wait) {
     for(uint16_t i=0; i<pixels->numPixels(); i++) {
-        PIXEL_COLOR* color = colorFunc();
+        PIXEL_COLOR* color = COLOR_FUNC();
         pixels->setPixelColor(i, Adafruit_NeoPixel::Color(color->r ,color->g, color->b));
         pixels->show();
         sleep_ms(wait);
