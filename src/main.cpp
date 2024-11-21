@@ -11,7 +11,11 @@ std::random_device dev;
 std::mt19937 gen(dev());
 
 const uint32_t PAUSE_TIME = 5000;
+static uint8_t level = 0 ;
+static uint8_t level2 = 0;
 
+static uint8_t adjust (uint8_t value);
+static uint8_t adjust2 (uint8_t value);
 PIXEL_COLOR* randomColor(void);
 uint16_t getType();
 
@@ -47,7 +51,7 @@ void vPixelOneTask(void*) {
     PIXEL_COLOR pumpkin(255, 45, 0);
     LightShow lightShow(std::stoi(NUM_PIXELS), NEOPIXEL_PIN, getType());
     for(;;) {
-        lightShow.glowing(&pumpkin);
+        lightShow.glowing(&pumpkin,CYCLEDELAY, &level, adjust);
         vTaskDelay(PAUSE_TIME);
         lightShow.sparkle(&pumpkin, 20, 5);
         vTaskDelay(PAUSE_TIME);
@@ -67,13 +71,24 @@ void vPixelOneTask(void*) {
 void vPixelTwoTask(void*) {
     LightShow lightShow(std::stoi(NUM_PIXELS2), NEOPIXEL2_PIN, NEO_RGB + NEO_KHZ800);
     for(;;) {
-        lightShow.sparkle(randomColor(), 10, 5);
-        vTaskDelay(PAUSE_TIME);
         lightShow.rainbow();
+        vTaskDelay(PAUSE_TIME);
+        lightShow.sparkle(randomColor(), 10, 5);
         vTaskDelay(PAUSE_TIME);
         lightShow.colorWipe(randomColor);
         vTaskDelay(PAUSE_TIME);
-        lightShow.glowing(randomColor());
+        lightShow.glowing(randomColor(),CYCLEDELAY, &level2, adjust2);
         vTaskDelay(PAUSE_TIME);
     }
 }
+
+// static functions
+static uint8_t adjust (uint8_t value) {
+    if (level == 0) return value ;
+    return ((value * neopixels_gamma8(level)) >> 8) ;
+};
+
+static uint8_t adjust2 (uint8_t value) {
+    if (level2 == 0) return value ;
+    return ((value * neopixels_gamma8(level2)) >> 8) ;
+};

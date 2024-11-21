@@ -16,10 +16,10 @@ LightShow::~LightShow() {
     delete this->pixels;//cleanup Adafruit_NeoPixel structure
 }
 
-void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay) {
-    pixels->setBrightnessFunctions(adjust,adjust,adjust,adjust);
+void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* l, AdjustFunc func) {
+    pixels->setBrightnessFunctions(func,func,func,func);
     pixels->clear(); // Set all pixel colors to 'off'
-    printf("cleared pixels 1, level = %d\n",level);
+    printf("cleared pixels 1, level = %d\n", *l);
 
     for(int i=0; i < pixels->numPixels(); i++) { // For each pixel...
         pixels->setPixelColor(i,Adafruit_NeoPixel::Color(c->r, c->g, c->b));
@@ -29,24 +29,24 @@ void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay) {
         sleep_ms(DELAYVAL); // Pause before next pass through loop
     }
     //set control brightness down and up
-    for(int i : range(3)) setBrightness(delay, i % 2);
-    level = 0; //set default brightness level
+    for(int i : range(3)) setBrightness(delay, i % 2, l, func);
+    *l = 0; //set default brightness level
 }
 
-void LightShow::setBrightness(uint16_t delay, bool up) {
+void LightShow::setBrightness(uint16_t delay, bool up, uint8_t* l, AdjustFunc func) {
     br_iterator iter(up);
     printf("Starting LightShow::setBrightness up=%d",up);
-    level = iter.begin();
+    *l = iter.begin();
     for(int i=0; i < 255 ; i++) {
-        level = iter.next();
-        printf("brightness level=%d", level);
-        pixels->setBrightnessFunctions(adjust, adjust, adjust, adjust);
+        *l = iter.next();
+        printf("brightness level=%d", *l);
+        pixels->setBrightnessFunctions(func, func, func, func);
         pixels->show();
         sleep_ms(delay);
     }
-    level = iter.end();
+    *l = iter.end();
 
-    printf("Ending LightShow::setBrightness level=%d",level);
+    printf("Ending LightShow::setBrightness level=%d", *l);
 }
 
 void LightShow::sparkle(struct PIXEL_COLOR* pixelColor, uint16_t cycles, uint32_t wait) {
