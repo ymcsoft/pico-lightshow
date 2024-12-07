@@ -5,6 +5,7 @@
 #ifndef PICO_LIGHTSHOW_LIGHTSHOW_H
 #define PICO_LIGHTSHOW_LIGHTSHOW_H
 #include <cstdio>
+#include <random>
 #include "pico/stdio.h"
 #include "pico/time.h"
 #include "FreeRTOS.h"
@@ -42,7 +43,7 @@ public:
     LightShow();
     LightShow(uint16_t numPixels, uint16_t pin, uint16_t type=NEO_GBR + NEO_KHZ800);
     virtual ~LightShow();
-    void glowing(struct PIXEL_COLOR* pixelColor, uint16_t delay, uint8_t* l, ADJUST_FUNC func);
+    void glowing(struct PIXEL_COLOR* pixelColor, uint16_t delay, uint8_t* level, ADJUST_FUNC func);
     void sparkle(struct PIXEL_COLOR* pixelColor, uint16_t cycles, uint32_t wait=CYCLEDELAY);
     void colorWipe(struct PIXEL_COLOR* (* COLOR_FUNC)(void), uint32_t wait=CYCLEDELAY);
     void theaterChase(struct PIXEL_COLOR* color, uint32_t wait=CYCLEDELAY);
@@ -66,7 +67,7 @@ private:
         return Adafruit_NeoPixel::Color(wheelPos * 3, 255 - wheelPos * 3, 0);
     }
 
-    void setBrightness(uint16_t delay, bool up, uint8_t* l, ADJUST_FUNC func);
+    void setBrightness(uint16_t delay, bool up, uint8_t* level, ADJUST_FUNC func);
 };
 
 #endif //PICO_LIGHTSHOW_LIGHTSHOW_H

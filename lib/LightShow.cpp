@@ -6,6 +6,9 @@
 #include "range.h"
 #include <random>
 
+std::random_device device;
+std::mt19937 rand_gen(device());
+
 LightShow::LightShow() : LightShow(NUMPIXELS, PIN, NEO_GBR + NEO_KHZ800) {};
 
 LightShow::LightShow(uint16_t numPixels, uint16_t pin, uint16_t type) {
@@ -16,10 +19,10 @@ LightShow::~LightShow() {
     delete this->pixels;//cleanup Adafruit_NeoPixel structure
 }
 
-void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* l, ADJUST_FUNC func) {
+void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* level, ADJUST_FUNC func) {
     pixels->setBrightnessFunctions(func,func,func,func);
     pixels->clear(); // Set all pixel colors to 'off'
-    printf("cleared pixels 1, level = %d\n", *l);
+    printf("cleared pixels 1, level = %d\n", *level);
 
     for(int i=0; i < pixels->numPixels(); i++) { // For each pixel...
         pixels->setPixelColor(i,Adafruit_NeoPixel::Color(c->r, c->g, c->b));
@@ -29,38 +32,40 @@ void LightShow::glowing(struct PIXEL_COLOR *c, uint16_t delay, uint8_t* l, ADJUS
         sleep_ms(DELAYVAL); // Pause before next pass through loop
     }
     //set control brightness down and up
-    for(int i : range(3)) setBrightness(delay, i % 2, l, func);
-    *l = 0; //set default brightness level
+    for(int i : range(3)) setBrightness(delay, i % 2, level, func);
+    *level = 0; //set default brightness level
 }
 
-void LightShow::setBrightness(uint16_t delay, bool up, uint8_t* l, ADJUST_FUNC func) {
+void LightShow::setBrightness(uint16_t delay, bool up, uint8_t* level, ADJUST_FUNC func) {
     br_iterator iter(up);
     printf("Starting LightShow::setBrightness up=%d",up);
-    *l = iter.begin();
+    *level = iter.begin();
     for(int i=0; i < 255 ; i++) {
-        *l = iter.next();
-        printf("brightness level=%d", *l);
+        *level = iter.next();
+        printf("brightness level=%d", *level);
         pixels->setBrightnessFunctions(func, func, func, func);
         pixels->show();
         sleep_ms(delay);
     }
-    *l = iter.end();
+    *level = iter.end();
 
-    printf("Ending LightShow::setBrightness level=%d", *l);
+    printf("Ending LightShow::setBrightness level=%d", *level);
 }
 
 void LightShow::sparkle(struct PIXEL_COLOR* pixelColor, uint16_t cycles, uint32_t wait) {
-    for(int c = 0; c < cycles; c++)
-        for(uint16_t i=0; i<pixels->numPixels(); i++) {
-            uint32_t colour = rand() % 16 ? Adafruit_NeoPixel::Color(0,0,0)
-                    : Adafruit_NeoPixel::Color(pixelColor->r,pixelColor->g,pixelColor->b);
-            pixels->setPixelColor(i, colour);
-            pixels->show();
-            sleep_ms(wait);
-            pixels->clear();
-            pixels->show();
-            sleep_ms(wait);
+    std::uniform_int_distribution<> pixels_distr(0, pixels->numPixels() - 1);
+
+    for(int c = 0; c < cycles; c++) {
+        for (uint16_t i = 0; i < pixels->numPixels() / 4; i++) {
+            uint32_t colour = Adafruit_NeoPixel::Color(pixelColor->r, pixelColor->g, pixelColor->b);
+            pixels->setPixelColor(pixels_distr(rand_gen), colour);
         }
+        pixels->show();
+        sleep_ms(wait);
+        pixels->clear();
+        pixels->show();
+        sleep_ms(wait);
+    }
 }
 
 void LightShow::colorWipe(struct PIXEL_COLOR* (* COLOR_FUNC)(), uint32_t wait) {

@@ -3,14 +3,14 @@
 // Which pin on the Pico is connected to the NeoPixels?
 #define NEOPIXEL_PIN        0 // The first port using GP0
 #define NEOPIXEL2_PIN       2 // The second port using GP2
-#define DELAY_VAL 100
+#define DELAY_VAL 200
 
 PIXEL_COLOR pixelColor;
 std::uniform_int_distribution<> distr(0, 255);
 std::random_device dev;
 std::mt19937 gen(dev());
 
-const uint32_t PAUSE_TIME = 5000;
+const uint32_t PAUSE_TIME = std::stoi(PAUSE);
 static uint8_t level = 0 ;
 static uint8_t level2 = 0;
 
@@ -53,7 +53,7 @@ void vPixelOneTask(void*) {
     for(;;) {
         lightShow.glowing(&pumpkin,CYCLEDELAY, &level, adjust);
         vTaskDelay(PAUSE_TIME);
-        lightShow.sparkle(&pumpkin, 20, 5);
+        lightShow.sparkle(randomColor(), 30, 200);
         vTaskDelay(PAUSE_TIME);
         lightShow.colorWipe(randomColor);
         vTaskDelay(PAUSE_TIME);
@@ -73,7 +73,7 @@ void vPixelTwoTask(void*) {
     for(;;) {
         lightShow.rainbow();
         vTaskDelay(PAUSE_TIME);
-        lightShow.sparkle(randomColor(), 10, 5);
+        lightShow.rainbowChase();
         vTaskDelay(PAUSE_TIME);
         lightShow.colorWipe(randomColor);
         vTaskDelay(PAUSE_TIME);
@@ -86,9 +86,9 @@ void vPixelTwoTask(void*) {
 static uint8_t adjust (uint8_t value) {
     if (level == 0) return value ;
     return ((value * neopixels_gamma8(level)) >> 8) ;
-};
+}
 
 static uint8_t adjust2 (uint8_t value) {
     if (level2 == 0) return value ;
     return ((value * neopixels_gamma8(level2)) >> 8) ;
-};
+}
