@@ -21,6 +21,11 @@ if (DEFINED ENV{PIXEL_TYPE} AND (NOT PIXEL_TYPE))
     message("Using PIXEL_TYPE from environment ('${PIXEL_TYPE}')")
 endif()
 
+if (DEFINED ENV{DELAY} AND (NOT DELAY))
+    set(DELAY $ENV{DELAY})
+    message("Using DELAY from the environment ('${DELAY}')")
+endif()
+
 if (DEFINED ENV{PAUSE} AND (NOT PAUSE))
     set(PAUSE $ENV{PAUSE})
     message("Using PAUSE from the environment ('${PAUSE}')")
@@ -37,6 +42,7 @@ target_compile_definitions(pico_lightshow PRIVATE
         NUM_PIXELS2=\"${NUM_PIXELS2}\"
         PIXEL_TYPE=\"${PIXEL_TYPE}\"
         PAUSE=\"${PAUSE}\"
+        DELAY=\"${DELAY}\"
         )
 
 pico_enable_stdio_usb(pico_lightshow 1)
