@@ -11,6 +11,8 @@ This project is a sample Raspberry Pi Pico project that uses the Adafruit Neopix
 - Rainbow effect
 - Rainbow chase effect
 
+![Light Show Demo](lightshow.gif)
+
 ## Prerequisites
 
 - Raspberry Pi Pico
