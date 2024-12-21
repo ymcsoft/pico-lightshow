@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.13)
-set(PICO_BOARD pico_w)
+set(PICO_BOARD pico2)
 include(pico_sdk_import.cmake)
 # Pull in FreeRTOS
-include($ENV{FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2040/FreeRTOS_Kernel_import.cmake)
-
+include($ENV{FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2350_ARM_NTZ/FreeRTOS_Kernel_import.cmake)
 project(pico_lightshow C CXX ASM)
 
 if (DEFINED ENV{NUM_PIXELS} AND (NOT NUM_PIXELS))
