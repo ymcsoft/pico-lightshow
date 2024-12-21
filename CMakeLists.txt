@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.13)
 set(PICO_BOARD pico2)
+set(PICO_PLATFORM rp2350)
 include(pico_sdk_import.cmake)
 # Pull in FreeRTOS
 include($ENV{FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2350_ARM_NTZ/FreeRTOS_Kernel_import.cmake)
