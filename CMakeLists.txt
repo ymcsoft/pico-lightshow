@@ -1,5 +1,11 @@
 cmake_minimum_required(VERSION 3.13)
-set(PICO_PLATFORM rp2350-riscv)
+if (DEFINED ENV{PICO_PLATFORM} AND (NOT PICO_PLATFORM))
+    set(PICO_PLATFORM $ENV{PICO_PLATFORM})
+    message("Using PICO_PLATFORM from environment ('${PICO_PLATFORM}')")
+else ()
+    set(PICO_PLATFORM rp2350-riscv)
+    message("Using default PICO_PLATFORM ('${PICO_PLATFORM}')")
+endif()
 include(pico_sdk_import.cmake)
 # Pull in FreeRTOS
 include($ENV{FREERTOS_KERNEL_PATH}/portable/ThirdParty/GCC/RP2350_ARM_NTZ/FreeRTOS_Kernel_import.cmake)
