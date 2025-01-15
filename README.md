@@ -24,6 +24,18 @@ This project is a sample Raspberry Pi Pico project that uses the Adafruit Neopix
 - Python 3 (for Pico SDK setup)
 - Git (for cloning repositories)
 
+## Setting Up the Environment
+
+### Configuring toolchain for RS2350 ARM architecture
+
+To build the project, you need to configure the toolchain for the RS2350 ARM architecture. Follow these steps to configure the toolchain:
+* Download the ARM toolchain from [here](https://developer.arm.com/downloads/-/arm-gnu-toolchain-downloads).
+* Extract the downloaded directory to a directory on your system.
+* Add the toolchain to your system's PATH environment variable or set PICO_TOOLCHAIN_PATH environment variable since there might be multiple toolchains configured in the system. You can do this by adding the following line to your shell configuration file (e.g., ~/.bashrc, ~/.zshrc, etc.):
+  ```sh
+  export PICO_TOOLCHAIN_PATH=/path/to/arm-toolchain
+  ```
+
 ### Configuring toolchain for RS2350 RISC-V architecture
 
 To build the project, you need to configure the toolchain for the RS2350 RISC-V architecture. Follow these steps to configure the toolchain:
@@ -45,7 +57,7 @@ To build the project, follow these steps:
 2. **Clone the Repository:**
 
    ```sh
-   git clone https://github.com/yourusername/pico-lightshow.git
+   git clone https://github.com/ymcsoft/pico-lightshow.git
    cd pico-lightshow
     ```
 3. Set Environment Variables:  Set the following environment variables according to your setup:  
