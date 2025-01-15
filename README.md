@@ -63,6 +63,7 @@ To build the project, follow these steps:
 3. Set Environment Variables:  Set the following environment variables according to your setup:  
    ```
    export PICO_SDK_PATH=/path/to/pico-sdk
+   export PICO_PLATFORM=rp2350# or rp2350-riscv
    export FREERTOS_KERNEL_PATH=/path/to/FreeRTOS-Kernel
    export NUM_PIXELS=30# Number of NeoPixel LEDs
    export NUM_PIXELS2=30# Number of NeoPixel LEDs
