@@ -2,8 +2,8 @@
 #include "LightShow.h"
 #include "hardware/gpio.h"
 // Which pin on the Pico is connected to the NeoPixels?
-#define NEOPIXEL_PIN        0 // The first port using GP0
-#define NEOPIXEL2_PIN       2 // The second port using GP2
+#define NEOPIXEL_PIN        2 // The first port using GP2
+#define NEOPIXEL2_PIN       8 // The second port using GP8
 
 PIXEL_COLOR pixelColor;
 std::uniform_int_distribution<> distr(0, 255);
@@ -33,7 +33,7 @@ int main () {
     gpio_put(CONTROL_PIN, true);
     TaskHandle_t task;
     xTaskCreate(vPixelOneTask, "Pico Show 1", configMINIMAL_STACK_SIZE, NULL, NEOPIXEL_TASK_PRIORITY, &task);
-#if NO_SYS && configUSE_CORE_AFFINITY && configNUM_CORES > 1
+#if NO_SYS && configUSE_CORE_AFFINITY && configNUMBER_OF_CORES > 1
     // we must bind the main task to one core (well at least while the init is called)
     // (note we only do this in NO_SYS mode, because cyw43_arch_freertos
     // takes care of it otherwise)

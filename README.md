@@ -24,7 +24,19 @@ This project is a sample Raspberry Pi Pico project that uses the Adafruit Neopix
 - Python 3 (for Pico SDK setup)
 - Git (for cloning repositories)
 
+### Configuring toolchain for RS2350 RISC-V architecture
+
+To build the project, you need to configure the toolchain for the RS2350 RISC-V architecture. Follow these steps to configure the toolchain:
+* Download the RISC-V toolchain from [here](https://embecosm.com/downloads/tool-chain-downloads/#risc-v-embedded-top-of-tree-compilers).
+* Extract the downloaded directory to a directory on your system.
+* Add the toolchain to your system's PATH environment variable or set PICO_TOOLCHAIN_PATH environment variable since there might be multiple toolchains configured in the system. You can do this by adding the following line to your shell configuration file (e.g., ~/.bashrc, ~/.zshrc, etc.):
+  ```sh
+  export PICO_TOOLCHAIN_PATH=/path/to/riscv-toolchain
+  ```
+
 ## Building the Project
+
+To build the project, follow these steps:
 
 1. **Set up the Pico SDK:**
 
